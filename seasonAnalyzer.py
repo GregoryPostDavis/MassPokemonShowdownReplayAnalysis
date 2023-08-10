@@ -9,7 +9,7 @@ class Pokemon:
         self.name = mon_name
         self.moveList = []
         self.teraTypes = []
-        self.timesBrought = 1
+        self.timesBrought = 0
 
     def printPokemon(self):
         print(self.name + ":", self.timesBrought)
@@ -20,20 +20,21 @@ class Pokemon:
         for teras in self.teraTypes:
             print("   ", teras)
 
-
     def usedPokemon(self):
         self.timesBrought = self.timesBrought + 1
 
     def add_unique_move(self, new_move):
-        if not any(move == new_move for move in self.moveList):
+        if not any(move1 == new_move for move1 in self.moveList):
             self.moveList.append(new_move)
-            #print("added", new_move)
+            print("added", new_move, "for", self.name)
+            for x in self.moveList:
+                print(x)
         else:
-            #print("did not add", new_move)
+            print("did not add", new_move, "for", self.name)
             pass
 
     def add_unique_tera(self, new_tera):
-        if not any(move == new_tera for tera in self.teraTypes):
+        if not any(tera == new_tera for tera in self.teraTypes):
             self.teraTypes.append(new_tera)
         else:
             pass
@@ -44,16 +45,15 @@ class Trainer:
         self.name = mon_name
         self.pokemon = []
 
-
     def printName(self):
         print(self.name)
 
-    def add_unique_pokemon(self, new_Pokemon):
-        if not any(mon.name == new_Pokemon for mon in self.pokemon):
-            self.pokemon.append(Pokemon(new_Pokemon))
-            #print(new_Pokemon, "added")
+    def add_unique_pokemon(self, new_pokemon):
+        if not any(mon1.name == new_pokemon for mon1 in self.pokemon):
+            self.pokemon.append(Pokemon(new_pokemon))
+            print(new_pokemon, "added")
         else:
-            #print(new_Pokemon, "not added")
+            print(new_pokemon, "not added")
             pass
 
     def writeLog(self):
@@ -61,18 +61,18 @@ class Trainer:
         for pokes in self.pokemon:
             g.write(pokes.name + ": " + str(pokes.timesBrought) + '\n' + "   Moves" + '\n')
             for moves in pokes.moveList:
-                g.write("       "+ moves+'\n')
+                g.write("       " + moves+'\n')
             if len(pokes.moveList) < 1:
                 g.write("       None"+'\n')
             g.write("   Tera Types" + '\n')
             for teras in pokes.teraTypes:
-                g.write("       "+ teras+'\n')
+                g.write("       " + teras+'\n')
             if len(pokes.teraTypes) < 1:
                 g.write("       None"+'\n')
             g.write("="*20+'\n')
         g.close()
 
-# Thank you Oc
+
 def nick_to_name(nick, nicknamed):
     for poke in nicknamed.keys():
         if nicknamed[poke] == nick:
@@ -82,12 +82,11 @@ def nick_to_name(nick, nicknamed):
 
 
 nicknames = dict()
-
 Trainers = []
 
 
 def add_unique_trainer(new_trainer):
-    if not any(trainer.name == new_trainer for trainer in Trainers):
+    if not any(trainer1.name == new_trainer for trainer1 in Trainers):
         if len(new_trainer.strip()) > 0:
             Trainers.append(Trainer(new_trainer))
             #print("new trainer added")
@@ -148,12 +147,11 @@ for entry in onlyFiles:
                     for mon in trainer.pokemon:
                         if mon.name == pkmn:
                             print(mon.name, mon.timesBrought)
-                            mon.timesBrought = mon.timesBrought +1
+                            mon.timesBrought = mon.timesBrought + 1
                         pass
                 # for p in x.pokemon:
                 #     print(p.name)
                 # print("="*20)
-
 
         elif prefix == "switch" or prefix == "drag":
 
@@ -169,11 +167,14 @@ for entry in onlyFiles:
 
             if nick_to_name(user, nicks):
                 user = nick_to_name(user, nicks)
-            if nick_to_name(target,nicks):
-                target = nick_to_name(target,nicks)
+            if nick_to_name(target, nicks):
+                target = nick_to_name(target, nicks)
+
+            #print("*-"*30, user)
 
             if args[0].startswith("p1"):
                 attacker = players.get("p1")
+                print(players.get("p1"))
                 for trainer in Trainers:
                     if trainer.name == attacker:
                         for mons in trainer.pokemon:
@@ -181,6 +182,7 @@ for entry in onlyFiles:
                                 mons.add_unique_move(move)
             else:
                 attacker = players.get("p2")
+                print(players.get("p2"))
                 for trainer in Trainers:
                     if trainer.name == attacker:
                         for mons in trainer.pokemon:
@@ -188,11 +190,11 @@ for entry in onlyFiles:
                                 mons.add_unique_move(move)
 
         elif prefix == "-terastallize":
-            type = args[1]
+            tera_type = args[1]
             user = args[0]
 
-            if nick_to_name(user,nicks):
-                user = nick_to_name(user,nicks)
+            if nick_to_name(user, nicks):
+                user = nick_to_name(user, nicks)
 
             if args[0].startswith("p1"):
                 attacker = players.get("p1")
@@ -200,33 +202,25 @@ for entry in onlyFiles:
                     if trainer.name == attacker:
                         for mons in trainer.pokemon:
                             if mons.name == user:
-                                mons.add_unique_tera(type)
+                                mons.add_unique_tera(tera_type)
             else:
                 attacker = players.get("p2")
                 for trainer in Trainers:
                     if trainer.name == attacker:
                         for mons in trainer.pokemon:
                             if mons.name == user:
-                                mons.add_unique_tera(type)
+                                mons.add_unique_tera(tera_type)
 
-
-
-
-
-    ####
-    #End of File
-
-
-    # for x in Trainers:
-    #     print(x.name)
-
+    ##############
+    #End of File #
+    ##############
 
 #############
 #End of Gathering Data
 for coach in Trainers:
+    coach.writeLog()
+
     #print(coach.name, len(coach.pokemon))
     # for mons in coach.pokemon:
     #     mons.printPokemon()
-    coach.writeLog()
     #print("="*10)
-
