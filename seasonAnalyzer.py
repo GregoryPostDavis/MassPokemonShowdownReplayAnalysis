@@ -123,6 +123,57 @@ for entry in onlyFiles:
             postCut = args[1].split(",")
             pkmn = postCut[0]
 
+            if pkmn == "Urshifu-*":
+                pkmn = "Urshifu"
+            elif pkmn == "Silvally-*":
+                pkmn = "Silvally"
+            elif pkmn == "Dudunsparce-*":
+                pkmn = "Dudunsparce"
+            elif pkmn == "Keldeo-*":
+                pkmn = "Keldeo"
+            elif pkmn == "Zarude-*":
+                pkmn = "Zarude"
+            elif pkmn.startswith("Tauros"):
+                pkmn = "Tauros"
+            elif pkmn.startswith("Castform"):
+                pkmn = "Castform"
+            elif pkmn.startswith("Burmy"):
+                pkmn = "Burmy"
+            elif pkmn.startswith("Wormadam"):
+                pkmn = "Wormadam"
+            elif pkmn.startswith("Deoxys"):
+                pkmn = "Deoxys"
+            elif pkmn.startswith("Unown"):
+                pkmn = "Unown"
+            elif pkmn.startswith("Cherrim"):
+                pkmn = "Cherrim"
+            elif pkmn.startswith("Gastrodon"):
+                pkmn = "Gastrodon"
+            elif pkmn.startswith("Arceus"):
+                pkmn = "Arceus"
+            elif pkmn.startswith("Basculin"):
+                pkmn = "Basculin"
+            elif pkmn.startswith("Deerling"):
+                pkmn = "Deerling"
+            elif pkmn.startswith("Sawsbuck"):
+                pkmn = "Sawsbuck"
+            elif pkmn.startswith("Meloetta"):
+                pkmn = "Meloetta"
+            elif pkmn.startswith("Genesect"):
+                pkmn = "Genesect"
+            elif pkmn.startswith("Vivillon"):
+                pkmn = "Vivillon"
+            elif pkmn.startswith("Flabebe"):
+                pkmn = "Flabebe"
+            elif pkmn.startswith("Floette"):
+                pkmn = "Floette"
+            elif pkmn.startswith("Florges"):
+                pkmn = "Florges"
+            elif pkmn.startswith("Minior"):
+                pkmn = "Minior"
+
+
+
             for trainer in Trainers:
                 if trainer.name.lower() == players.get(args[0]).lower():
                     trainer.add_unique_pokemon(pkmn)
