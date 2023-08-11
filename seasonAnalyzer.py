@@ -196,6 +196,10 @@ for entry in onlyFiles:
             if nick_to_name(user, nicks):
                 user = nick_to_name(user, nicks)
 
+            if len(args) > 3:
+                if "Metronome" in args[3] or "Assist" in args[3]:
+                    break
+
             if args[0].startswith("p1"):
                 attacker = players.get("p1").lower()
                 for trainer in Trainers:
