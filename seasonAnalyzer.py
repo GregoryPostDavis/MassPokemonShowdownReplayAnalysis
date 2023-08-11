@@ -1,3 +1,8 @@
+#Made Aug 10, 2023 by Gregory Post Davis
+#Special Thanks to ocarina919 for the foundation
+#This was written based off of the ReplayTool seen on my GitHub
+#Which was written primarily by ocarina919 with testing and some addtional features by me
+
 import re
 from os import listdir
 from os import getcwd
@@ -23,11 +28,7 @@ class Pokemon:
     def add_unique_move(self, new_move):
         if not any(move1 == new_move for move1 in self.moveList):
             self.moveList.append(new_move)
-            #print("added", new_move, "for", self.name)
-            # for x in self.moveList:
-            #     print(x)
         else:
-            #print("did not add", new_move, "for", self.name)
             pass
 
     def add_unique_tera(self, new_tera):
@@ -45,9 +46,7 @@ class Trainer:
     def add_unique_pokemon(self, new_pokemon):
         if not any(mon1.name == new_pokemon for mon1 in self.pokemon):
             self.pokemon.append(Pokemon(new_pokemon))
-            #print(new_pokemon, "added")
         else:
-            #print(new_pokemon, "not added")
             pass
 
     def writeLog(self):
@@ -96,13 +95,6 @@ onlyFiles = [f for f in listdir(mypath) if isfile(join(mypath, f)) and f.endswit
 for entry in onlyFiles:
     with open(entry, encoding='utf-8') as f:
         file = f.read()
-    print("="*10, entry, "="*10)
-    for t in Trainers:
-        print (t.name)
-    # for c in Trainers:
-    #     for mons in c.pokemon:
-    #         mons.printPokemon()
-    #     print("="*10)
 
     file = file.split("<script type=\"text/plain\" class=\"battle-log-data\">")[1]
     file = file.split("</script>")[0]
@@ -136,7 +128,6 @@ for entry in onlyFiles:
                     trainer.add_unique_pokemon(pkmn)
                     for mon in trainer.pokemon:
                         if mon.name == pkmn:
-                            #print(mon.name, mon.timesBrought)
                             mon.timesBrought = mon.timesBrought + 1
                         pass
             pass
@@ -156,7 +147,6 @@ for entry in onlyFiles:
 
             if args[0].startswith("p1"):
                 attacker = players.get("p1").lower()
-                #print(attacker)
                 for trainer in Trainers:
                     if trainer.name == attacker:
                         for mons in trainer.pokemon:
@@ -164,7 +154,6 @@ for entry in onlyFiles:
                                 mons.add_unique_move(move)
             else:
                 attacker = players.get("p2").lower()
-                #print(attacker)
                 for trainer in Trainers:
                     if trainer.name == attacker:
                         for mons in trainer.pokemon:
@@ -195,16 +184,12 @@ for entry in onlyFiles:
                                 mons.add_unique_tera(tera_type)
             pass
 
-    ##############
-    #End of File #
-    ##############
+    ####################
+    # End of HTML File #
+    ####################
 
-#############
-#End of Gathering Data
+#########################
+# End of Gathering Data #
+#########################
 for coach in Trainers:
     coach.writeLog()
-
-    #print(coach.name, len(coach.pokemon))
-    # for mons in coach.pokemon:
-    #     mons.printPokemon()
-    #print("="*10)
