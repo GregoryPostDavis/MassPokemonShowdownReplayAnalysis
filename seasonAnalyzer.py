@@ -1,7 +1,7 @@
-#Made Aug 10, 2023 by Gregory Post Davis
-#Special Thanks to ocarina919 for the foundation
-#This was written based off of the ReplayTool seen on my GitHub
-#Which was written primarily by ocarina919 with testing and some addtional features by me
+# Made Aug 10, 2023 by Gregory Post Davis
+# Special Thanks to ocarina919 for the foundation
+# This was written based off of the ReplayTool seen on my GitHub
+# Which was written primarily by ocarina919 with testing and some addtional features by me
 
 import re
 from os import listdir
@@ -18,10 +18,10 @@ class Pokemon:
 
     def printPokemon(self):
         print(self.name + ":", self.timesBrought)
-        print('\n'+"Moves")
+        print('\n' + "Moves")
         for moves in self.moveList:
             print("   ", moves)
-        print('\n'+"Tera Types")
+        print('\n' + "Tera Types")
         for teras in self.teraTypes:
             print("   ", teras)
 
@@ -50,19 +50,19 @@ class Trainer:
             pass
 
     def writeLog(self):
-        g = open(self.name+".txt", "w")
+        g = open(self.name + ".txt", "w")
         for pokes in self.pokemon:
             g.write(pokes.name + ": " + str(pokes.timesBrought) + '\n' + "   Moves" + '\n')
             for moves in pokes.moveList:
-                g.write("       " + moves+'\n')
+                g.write("       " + moves + '\n')
             if len(pokes.moveList) < 1:
-                g.write("       None"+'\n')
+                g.write("       None" + '\n')
             g.write("   Tera Types" + '\n')
             for teras in pokes.teraTypes:
-                g.write("       " + teras+'\n')
+                g.write("       " + teras + '\n')
             if len(pokes.teraTypes) < 1:
-                g.write("       None"+'\n')
-            g.write("="*20+'\n')
+                g.write("       None" + '\n')
+            g.write("=" * 20 + '\n')
         g.close()
 
 
@@ -79,14 +79,15 @@ def nick_to_name(nick, nicknamed):
 
 
 def add_unique_trainer(new_trainer):
-    if not any(trainer.name == new_trainer.lower() for trainer in Trainers):
+    no_spaces = new_trainer.replace(" ", "")
+    if not any(trainer.name == no_spaces.lower() for trainer in Trainers):
         if len(new_trainer.strip()) > 0:
             Trainers.append(Trainer(new_trainer.lower()))
     else:
         pass
 
 
-#Establish File Path as Current Directory and take all html files
+# Establish File Path as Current Directory and take all html files
 mypath = getcwd()
 onlyFiles = [f for f in listdir(mypath) if isfile(join(mypath, f)) and f.endswith(".html")]
 #
@@ -105,7 +106,7 @@ for entry in onlyFiles:
     nicks = dict()
     currently_out = dict()
 
-    #Acutal Looping goes in here
+    # Acutal Looping goes in here
     for line in lines:
         result = re.match("^\|(.*?)\|(.*)", line)
         if result:
@@ -115,7 +116,7 @@ for entry in onlyFiles:
             continue
 
         if prefix == "player":
-            players[args[0]] = args[1]
+            players[args[0]] = args[1].replace(" ", "")
             usernames.append(args[1])
             add_unique_trainer(args[1].lower())
 
@@ -172,10 +173,9 @@ for entry in onlyFiles:
             elif pkmn.startswith("Minior"):
                 pkmn = "Minior"
 
-
-
             for trainer in Trainers:
-                if trainer.name.lower() == players.get(args[0]).lower():
+                no_spaces = players.get(args[0]).lower().replace(" ", "")
+                if trainer.name.lower().replace(" ", "") == no_spaces:
                     trainer.add_unique_pokemon(pkmn)
                     for mon in trainer.pokemon:
                         if mon.name == pkmn:
@@ -188,7 +188,7 @@ for entry in onlyFiles:
             nicks[args[1]] = args[0]
             player_id = args[0].split(":")[0]
             currently_out[player_id] = args[0]
-            #(currently_out.get(player_id))
+            # (currently_out.get(player_id))
 
         elif prefix == "move":
             user = args[0]
@@ -201,16 +201,16 @@ for entry in onlyFiles:
                     break
 
             if args[0].startswith("p1"):
-                attacker = players.get("p1").lower()
+                attacker = players.get("p1").lower().replace(" ", "")
                 for trainer in Trainers:
-                    if trainer.name == attacker:
+                    if trainer.name.replace(" ", "") == attacker:
                         for mons in trainer.pokemon:
                             if mons.name == user:
                                 mons.add_unique_move(move)
             else:
-                attacker = players.get("p2").lower()
+                attacker = players.get("p2").lower().replace(" ", "")
                 for trainer in Trainers:
-                    if trainer.name == attacker:
+                    if trainer.name.replace(" ", "") == attacker:
                         for mons in trainer.pokemon:
                             if mons.name == user:
                                 mons.add_unique_move(move)
@@ -224,16 +224,16 @@ for entry in onlyFiles:
                 user = nick_to_name(user, nicks)
 
             if args[0].startswith("p1"):
-                attacker = players.get("p1").lower()
+                attacker = players.get("p1").lower().replace(" ", "")
                 for trainer in Trainers:
-                    if trainer.name == attacker:
+                    if trainer.name.replace(" ", "") == attacker:
                         for mons in trainer.pokemon:
                             if mons.name == user:
                                 mons.add_unique_tera(tera_type)
             else:
-                attacker = players.get("p2").lower()
+                attacker = players.get("p2").lower().replace(" ", "")
                 for trainer in Trainers:
-                    if trainer.name == attacker:
+                    if trainer.name.replace(" ", "") == attacker:
                         for mons in trainer.pokemon:
                             if mons.name == user:
                                 mons.add_unique_tera(tera_type)
