@@ -39,9 +39,12 @@ class Pokemon:
 
 
 class Trainer:
-    def __init__(self, mon_name):
-        self.name = mon_name
+    def __init__(self, t_name):
+        self.name = t_name
         self.pokemon = []
+        self.wins = 0
+        self.losses = 0
+        self.gp = 0
 
     def add_unique_pokemon(self, new_pokemon):
         if not any(mon1.name == new_pokemon for mon1 in self.pokemon):
@@ -50,6 +53,7 @@ class Trainer:
             pass
 
     def writeLog(self):
+        self.losses = self.gp - self.wins
         g = open(self.name + ".txt", "w")
         for pokes in self.pokemon:
             g.write(pokes.name + ": " + str(pokes.timesBrought) + '\n' + "   Moves" + '\n')
@@ -79,10 +83,11 @@ def nick_to_name(nick, nicknamed):
 
 
 def add_unique_trainer(new_trainer):
-    no_spaces = new_trainer.replace(" ", "")
-    if not any(trainer.name == no_spaces.lower() for trainer in Trainers):
-        if len(new_trainer.strip()) > 0:
-            Trainers.append(Trainer(new_trainer.lower()))
+    print(new_trainer)
+    t = re.sub('[^0-9a-zA-Z]+', '', new_trainer).lower()
+    if not any(tr.name == t for tr in Trainers):
+        if len(t) > 0:
+            Trainers.append(Trainer(t))
     else:
         pass
 
@@ -116,10 +121,16 @@ for entry in onlyFiles:
             continue
 
         if prefix == "player":
-            players[args[0]] = args[1].replace(" ", "")
-            usernames.append(args[1])
-            add_unique_trainer(args[1].lower())
+            #players is an array of the two players in the game
+            players[args[0]] = re.sub('[^0-9a-zA-Z]+', '', args[1]).lower()
+            usernames.append(re.sub('[^0-9a-zA-Z]+', '', args[1]).lower())
+            add_unique_trainer(re.sub('[^0-9a-zA-Z]+', '', args[1]).lower())
 
+            for t in Trainers:
+                if t.name == re.sub('[^0-9a-zA-Z]+', '', args[1]).lower():
+                    t.gp = t.gp + 1
+
+        # Deal with Pokemon with Mulitple Formes
         elif prefix == "poke":
             postCut = args[1].split(",")
             pkmn = postCut[0]
@@ -174,8 +185,9 @@ for entry in onlyFiles:
                 pkmn = "Minior"
 
             for trainer in Trainers:
-                no_spaces = players.get(args[0]).lower().replace(" ", "")
-                if trainer.name.lower().replace(" ", "") == no_spaces:
+                unmod_name = players.get(args[0])
+                simple_name = re.sub('[^0-9a-zA-Z]+', '', unmod_name).lower()
+                if trainer.name == simple_name:
                     trainer.add_unique_pokemon(pkmn)
                     for mon in trainer.pokemon:
                         if mon.name == pkmn:
@@ -237,7 +249,13 @@ for entry in onlyFiles:
                         for mons in trainer.pokemon:
                             if mons.name == user:
                                 mons.add_unique_tera(tera_type)
-            pass
+
+        elif prefix == "win":
+            for t in Trainers:
+                if t.name == re.sub('[^0-9a-zA-Z]+', '', args[0]):
+                    t.wins = t.wins + 1
+                    t.losses = t.gp - t.wins
+
 
     ####################
     # End of HTML File #
@@ -246,5 +264,9 @@ for entry in onlyFiles:
 #########################
 # End of Gathering Data #
 #########################
+print("* * *")
 for coach in Trainers:
     coach.writeLog()
+    print(coach.name, coach.gp, "Games Played")
+    #print(coach.wins, "Wins")
+    #print(coach.losses, "Losses")
