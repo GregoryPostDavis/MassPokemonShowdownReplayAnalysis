@@ -141,8 +141,10 @@ def handle_formes(pkmn):
         pkmn = "Dudunsparce"
     elif pkmn.startswith("Keldeo"):
         pkmn = "Keldeo"
-    elif pkmn.startswith("Ogerpon"):
-        pkmn = "Ogerpon"
+    elif pkmn.startswith("Pikachu"):
+        pkmn = "Pikachu"
+    elif pkmn.startswith("Greninja"):
+        pkmn = "Greninja"
 
     return pkmn
 
@@ -154,7 +156,6 @@ onlyFiles = [f for f in listdir(mypath) if isfile(join(mypath, f)) and f.endswit
 
 for entry in onlyFiles:
     playersAdded = 0
-    print("File Name:", entry)
     with open(entry, encoding='utf-8') as f:
         file = f.read()
 
@@ -280,4 +281,4 @@ for entry in onlyFiles:
 
 for coach in Trainers:
     coach.writeLog()
-    print(coach.name, coach.gp, "Games Played", coach.wins, coach.losses)
+    # print(coach.name, coach.gp, "Games Played", coach.wins, coach.losses)
