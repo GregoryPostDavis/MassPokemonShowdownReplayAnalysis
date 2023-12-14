@@ -55,6 +55,7 @@ class Trainer:
     def writeLog(self):
         self.losses = self.gp - self.wins
         g = open(self.name + ".txt", "w")
+        g.write(self.name + ": " + str(self.wins) + "-" + str(self.losses) + '\n')
         for pokes in self.pokemon:
             g.write(pokes.name + ": " + str(pokes.timesBrought) + '\n' + "   Moves" + '\n')
             for moves in pokes.moveList:
@@ -217,7 +218,6 @@ for entry in onlyFiles:
             move = args[1]
             if nick_to_name(user, nicks):
                 user = handle_formes(nick_to_name(user, nicks))
-            print(user)
 
             if len(args) > 3:
                 if "Metronome" in args[3] or "Assist" in args[3]:
@@ -263,7 +263,7 @@ for entry in onlyFiles:
 
         elif prefix == "win":
             for t in Trainers:
-                if t.name == re.sub('[^0-9a-zA-Z]+', '', args[0]):
+                if t.name.lower() == re.sub('[^0-9a-zA-Z]+', '', args[0]).lower():
                     t.wins = t.wins + 1
                     t.losses = t.gp - t.wins
         else:
@@ -280,6 +280,4 @@ for entry in onlyFiles:
 
 for coach in Trainers:
     coach.writeLog()
-    #print(coach.name, coach.gp, "Games Played")
-    #print(coach.wins, "Wins")
-    #print(coach.losses, "Losses")
+    print(coach.name, coach.gp, "Games Played", coach.wins, coach.losses)
