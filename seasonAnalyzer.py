@@ -91,6 +91,59 @@ def add_unique_trainer(new_trainer):
     else:
         pass
 
+def handle_formes(pkmn):
+    if pkmn.startswith("Tauros"):
+        pkmn = "Tauros"
+    elif pkmn.startswith("Castform"):
+        pkmn = "Castform"
+    elif pkmn.startswith("Burmy"):
+        pkmn = "Burmy"
+    elif pkmn.startswith("Wormadam"):
+        pkmn = "Wormadam"
+    elif pkmn.startswith("Deoxys"):
+        pkmn = "Deoxys"
+    elif pkmn.startswith("Unown"):
+        pkmn = "Unown"
+    elif pkmn.startswith("Cherrim"):
+        pkmn = "Cherrim"
+    elif pkmn.startswith("Gastrodon"):
+        pkmn = "Gastrodon"
+    elif pkmn.startswith("Arceus"):
+        pkmn = "Arceus"
+    elif pkmn.startswith("Basculin"):
+        pkmn = "Basculin"
+    elif pkmn.startswith("Deerling"):
+        pkmn = "Deerling"
+    elif pkmn.startswith("Sawsbuck"):
+        pkmn = "Sawsbuck"
+    elif pkmn.startswith("Meloetta"):
+        pkmn = "Meloetta"
+    elif pkmn.startswith("Genesect"):
+        pkmn = "Genesect"
+    elif pkmn.startswith("Vivillon"):
+        pkmn = "Vivillon"
+    elif pkmn.startswith("Flabebe"):
+        pkmn = "Flabebe"
+    elif pkmn.startswith("Floette"):
+        pkmn = "Floette"
+    elif pkmn.startswith("Florges"):
+        pkmn = "Florges"
+    elif pkmn.startswith("Minior"):
+        pkmn = "Minior"
+    elif pkmn.startswith("Zarude"):
+        pkmn = "Zarude"
+    elif pkmn.startswith("Urshifu"):
+        pkmn = "Urshifu"
+    elif pkmn.startswith("Silvally"):
+        pkmn = "Silvally"
+    elif pkmn.startswith("Dudunsparce"):
+        pkmn = "Dudunsparce"
+    elif pkmn.startswith("Keldeo"):
+        pkmn = "Keldeo"
+    elif pkmn.startswith("Ogerpon"):
+        pkmn = "Ogerpon"
+
+    return pkmn
 
 # Establish File Path as Current Directory and take all html files
 mypath = getcwd()
@@ -135,59 +188,9 @@ for entry in onlyFiles:
                         t.gp = t.gp + 1
                 playersAdded = playersAdded + 1
 
-        # Deal with Pokemon with Mulitple Formes
         elif prefix == "poke":
             postCut = args[1].split(",")
-            pkmn = postCut[0]
-
-            if pkmn == "Urshifu-*":
-                pkmn = "Urshifu"
-            elif pkmn == "Silvally-*":
-                pkmn = "Silvally"
-            elif pkmn == "Dudunsparce-*":
-                pkmn = "Dudunsparce"
-            elif pkmn == "Keldeo-*":
-                pkmn = "Keldeo"
-            elif pkmn == "Zarude-*":
-                pkmn = "Zarude"
-            elif pkmn.startswith("Tauros"):
-                pkmn = "Tauros"
-            elif pkmn.startswith("Castform"):
-                pkmn = "Castform"
-            elif pkmn.startswith("Burmy"):
-                pkmn = "Burmy"
-            elif pkmn.startswith("Wormadam"):
-                pkmn = "Wormadam"
-            elif pkmn.startswith("Deoxys"):
-                pkmn = "Deoxys"
-            elif pkmn.startswith("Unown"):
-                pkmn = "Unown"
-            elif pkmn.startswith("Cherrim"):
-                pkmn = "Cherrim"
-            elif pkmn.startswith("Gastrodon"):
-                pkmn = "Gastrodon"
-            elif pkmn.startswith("Arceus"):
-                pkmn = "Arceus"
-            elif pkmn.startswith("Basculin"):
-                pkmn = "Basculin"
-            elif pkmn.startswith("Deerling"):
-                pkmn = "Deerling"
-            elif pkmn.startswith("Sawsbuck"):
-                pkmn = "Sawsbuck"
-            elif pkmn.startswith("Meloetta"):
-                pkmn = "Meloetta"
-            elif pkmn.startswith("Genesect"):
-                pkmn = "Genesect"
-            elif pkmn.startswith("Vivillon"):
-                pkmn = "Vivillon"
-            elif pkmn.startswith("Flabebe"):
-                pkmn = "Flabebe"
-            elif pkmn.startswith("Floette"):
-                pkmn = "Floette"
-            elif pkmn.startswith("Florges"):
-                pkmn = "Florges"
-            elif pkmn.startswith("Minior"):
-                pkmn = "Minior"
+            pkmn = handle_formes(postCut[0])
 
             for trainer in Trainers:
                 unmodified_name = players.get(args[0])
@@ -201,8 +204,10 @@ for entry in onlyFiles:
             pass
 
         elif prefix == "switch" or prefix == "drag":
+            pkmn_nickname = args[1]
+            pkmn_name = handle_formes(args[0])
 
-            nicks[args[1]] = args[0]
+            nicks[pkmn_nickname] = pkmn_name
             player_id = args[0].split(":")[0]
             currently_out[player_id] = args[0]
             # (currently_out.get(player_id))
@@ -211,23 +216,24 @@ for entry in onlyFiles:
             user = args[0]
             move = args[1]
             if nick_to_name(user, nicks):
-                user = nick_to_name(user, nicks)
+                user = handle_formes(nick_to_name(user, nicks))
+            print(user)
 
             if len(args) > 3:
                 if "Metronome" in args[3] or "Assist" in args[3]:
                     break
 
             if args[0].startswith("p1"):
-                attacker = players.get("p1").lower().replace(" ", "")
+                attacker = re.sub('[^0-9a-zA-Z]+', '', players.get("p1")).lower()
                 for trainer in Trainers:
-                    if trainer.name.replace(" ", "") == attacker:
+                    if trainer.name == attacker:
                         for mons in trainer.pokemon:
                             if mons.name == user:
                                 mons.add_unique_move(move)
             else:
-                attacker = players.get("p2").lower().replace(" ", "")
+                attacker = re.sub('[^0-9a-zA-Z]+', '', players.get("p2")).lower()
                 for trainer in Trainers:
-                    if trainer.name.replace(" ", "") == attacker:
+                    if trainer.name == attacker:
                         for mons in trainer.pokemon:
                             if mons.name == user:
                                 mons.add_unique_move(move)
@@ -238,19 +244,19 @@ for entry in onlyFiles:
             user = args[0]
 
             if nick_to_name(user, nicks):
-                user = nick_to_name(user, nicks)
+                user = handle_formes(nick_to_name(user, nicks))
 
             if args[0].startswith("p1"):
-                attacker = players.get("p1").lower().replace(" ", "")
+                attacker = re.sub('[^0-9a-zA-Z]+', '', players.get("p1").lower())
                 for trainer in Trainers:
-                    if trainer.name.replace(" ", "") == attacker:
+                    if trainer.name == attacker:
                         for mons in trainer.pokemon:
                             if mons.name == user:
                                 mons.add_unique_tera(tera_type)
             else:
-                attacker = players.get("p2").lower().replace(" ", "")
+                attacker = re.sub('[^0-9a-zA-Z]+', '', players.get("p2").lower())
                 for trainer in Trainers:
-                    if trainer.name.replace(" ", "") == attacker:
+                    if trainer.name == attacker:
                         for mons in trainer.pokemon:
                             if mons.name == user:
                                 mons.add_unique_tera(tera_type)
