@@ -88,7 +88,6 @@ def add_unique_trainer(new_trainer):
     if not any(tr.name == t for tr in Trainers):
         if len(t) > 0:
             Trainers.append(Trainer(t))
-            print("New Trainer:", t)
     else:
         pass
 
@@ -184,7 +183,6 @@ for entry in onlyFiles:
                 usernames.append(re.sub('[^0-9a-zA-Z]+', '', args[1]).lower())
                 add_unique_trainer(re.sub('[^0-9a-zA-Z]+', '', args[1]).lower())
 
-                print(args[1].lower())
                 for t in Trainers:
                     if t.name == re.sub('[^0-9a-zA-Z]+', '', args[1]).lower():
                         t.gp = t.gp + 1
